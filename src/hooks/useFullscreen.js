@@ -11,6 +11,16 @@ export function useFullscreen(isQuizActive, onExit, onTerminate) {
     }, [isQuizActive]);
 
     useEffect(() => {
+        const triggerStrike = () => {
+            if (!isQuizActive) return;
+            exitCount.current += 1;
+            if (exitCount.current === 1) {
+                onExit(); // First strike
+            } else if (exitCount.current >= 2) {
+                onTerminate(); // Second strike
+            }
+        };
+
         const handleFullscreenChange = () => {
             if (!isQuizActive) return;
 
@@ -22,12 +32,19 @@ export function useFullscreen(isQuizActive, onExit, onTerminate) {
             );
 
             if (!isFullscreen) {
-                exitCount.current += 1;
-                if (exitCount.current === 1) {
-                    onExit(); // First strike
-                } else if (exitCount.current >= 2) {
-                    onTerminate(); // Second strike
-                }
+                triggerStrike();
+            }
+        };
+
+        const handleVisibilityChange = () => {
+            if (document.hidden && isQuizActive) {
+                triggerStrike();
+            }
+        };
+
+        const handleBlur = () => {
+            if (isQuizActive) {
+                triggerStrike();
             }
         };
 
@@ -35,6 +52,10 @@ export function useFullscreen(isQuizActive, onExit, onTerminate) {
         document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
         document.addEventListener('mozfullscreenchange', handleFullscreenChange);
         document.addEventListener('MSFullscreenChange', handleFullscreenChange);
+
+        // Tab visibility / blur tracking
+        document.addEventListener('visibilitychange', handleVisibilityChange);
+        window.addEventListener('blur', handleBlur);
 
         // Try to prevent F11
         const handleKeyDown = (e) => {
@@ -50,6 +71,8 @@ export function useFullscreen(isQuizActive, onExit, onTerminate) {
             document.removeEventListener('webkitfullscreenchange', handleFullscreenChange);
             document.removeEventListener('mozfullscreenchange', handleFullscreenChange);
             document.removeEventListener('MSFullscreenChange', handleFullscreenChange);
+            document.removeEventListener('visibilitychange', handleVisibilityChange);
+            window.removeEventListener('blur', handleBlur);
             document.removeEventListener('keydown', handleKeyDown);
         };
     }, [isQuizActive, onExit, onTerminate]);
