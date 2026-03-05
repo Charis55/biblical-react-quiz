@@ -101,6 +101,18 @@ function App() {
         {screen === 'terminated' && <TerminatedScreen onRestart={resetToHome} />}
       </div>
 
+      <footer style={{
+        position: 'absolute',
+        bottom: '20px',
+        width: '100%',
+        textAlign: 'center',
+        color: 'var(--text-muted)',
+        fontSize: '0.9rem',
+        zIndex: 5
+      }}>
+        &copy; {new Date().getFullYear()} CharisCorp
+      </footer>
+
       {showWarning && <WarningModal onResume={handleResume} />}
     </>
   );
