@@ -32,28 +32,27 @@ function App() {
   const handleStart = async (count) => {
     try {
       await requestFullscreen();
-
-      // Shuffle completely and slice the requested amount
-      const shuffled = [...allQuestions].sort(() => 0.5 - Math.random());
-      const selected = shuffled.slice(0, count);
-
-      setQuizQuestions(selected);
-      setScore(0);
-      setShowWarning(false);
-      setScreen('quiz');
     } catch (err) {
-      alert("You must allow full screen to start the quiz.");
-      console.error(err);
+      console.warn("Fullscreen API not supported or blocked. Proceeding without fullscreen.", err);
     }
+
+    // Shuffle completely and slice the requested amount
+    const shuffled = [...allQuestions].sort(() => 0.5 - Math.random());
+    const selected = shuffled.slice(0, count);
+
+    setQuizQuestions(selected);
+    setScore(0);
+    setShowWarning(false);
+    setScreen('quiz');
   };
 
   const handleResume = async () => {
     try {
       await requestFullscreen();
-      setShowWarning(false);
     } catch (err) {
-      alert("You MUST enter full screen to resume.");
+      console.warn("Fullscreen API not supported or blocked. Proceeding.", err);
     }
+    setShowWarning(false);
   };
 
   const handleQuizComplete = (finalScore) => {
