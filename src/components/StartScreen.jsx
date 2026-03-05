@@ -38,7 +38,7 @@ export default function StartScreen({ onStart }) {
                         <option value="25">25 Questions</option>
                         <option value="50">50 Questions</option>
                         <option value="100">100 Questions</option>
-                        <option value="500">All 500 Questions</option>
+                        <option value="260">All 260 Questions</option>
                     </select>
                 </div>
 
