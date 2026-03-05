@@ -69,6 +69,11 @@ function App() {
     setScore(0);
   };
 
+  const handleQuit = () => {
+    resetToHome();
+    exitFullscreen();
+  };
+
   return (
     <>
       <div className="bg-shape shape-1"></div>
@@ -81,6 +86,7 @@ function App() {
           <QuizScreen
             questions={quizQuestions}
             onComplete={handleQuizComplete}
+            onQuit={handleQuit}
           />
         )}
 

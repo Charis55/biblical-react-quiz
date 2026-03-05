@@ -1,9 +1,16 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
 export function useFullscreen(isQuizActive, onExit, onTerminate) {
-    useEffect(() => {
-        let exitCount = 0;
+    const exitCount = useRef(0);
 
+    // Reset strike count when quiz becomes inactive
+    useEffect(() => {
+        if (!isQuizActive) {
+            exitCount.current = 0;
+        }
+    }, [isQuizActive]);
+
+    useEffect(() => {
         const handleFullscreenChange = () => {
             if (!isQuizActive) return;
 
@@ -15,10 +22,10 @@ export function useFullscreen(isQuizActive, onExit, onTerminate) {
             );
 
             if (!isFullscreen) {
-                exitCount++;
-                if (exitCount === 1) {
+                exitCount.current += 1;
+                if (exitCount.current === 1) {
                     onExit(); // First strike
-                } else if (exitCount >= 2) {
+                } else if (exitCount.current >= 2) {
                     onTerminate(); // Second strike
                 }
             }

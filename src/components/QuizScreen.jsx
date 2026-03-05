@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 const LETTERS = ['A', 'B', 'C', 'D'];
 
-export default function QuizScreen({ questions, onComplete }) {
+export default function QuizScreen({ questions, onComplete, onQuit }) {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [score, setScore] = useState(0);
     const [hasAnswered, setHasAnswered] = useState(false);
@@ -54,6 +54,7 @@ export default function QuizScreen({ questions, onComplete }) {
                             <span className="stat-icon">⭐</span>
                             <span>Score: {score}</span>
                         </div>
+                        <button onClick={onQuit} className="btn secondary-btn" style={{ padding: '6px 14px', fontSize: '0.85rem' }}>Quit Quiz</button>
                     </div>
                     <div className="progress-bar-container">
                         <div className="progress-bar" style={{ width: `${progressPercentage}%` }}></div>
